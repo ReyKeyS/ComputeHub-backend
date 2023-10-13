@@ -1,6 +1,7 @@
 const express = require("express");
 const env = require("./config/env.config");
 const cors = require("cors");
+const { connect, getConn } = require('./database/connection');
 
 const app = express();
 
@@ -10,10 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
     cors({
         origin: "http://localhost:5173",
-        credentials: true,
-        methods: "GET, HEAD, PUT, PATCH, POST, DELETE"
+        optionsSuccessStatus: 200,
     })
-);
+); 
 
 // app.use('/api', apiRouter);
 
@@ -23,3 +23,4 @@ app.all('*', (req, res) => {
 
 const port = 3000;
 app.listen(port, env("HOST"), () => console.log(`Listening on port ${port}!`));
+connect();
