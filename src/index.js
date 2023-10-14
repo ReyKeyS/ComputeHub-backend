@@ -10,12 +10,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: '*',
         optionsSuccessStatus: 200,
     })
 ); 
 
-// app.use('/api', apiRouter);
+// Routes
+const userRouter = require("./routes/users");
+
+app.use('/api', userRouter);
 
 app.all('*', (req, res) => {
     return res.status(404).json({ message: `Page Not Found!` });
