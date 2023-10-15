@@ -16,9 +16,9 @@ const itemSchema = new Schema({
     brand: String,
     picture: String,
     status: Boolean,
-    created_at: Date,
-    updated_at: Date,
     deleted_at: Date,
+}, {
+    timestamps: {createdAt: 'create_at', updatedAt: 'update_at'}, versionKey: false
 });
 
 const Item = mongoose.model('Item', itemSchema);

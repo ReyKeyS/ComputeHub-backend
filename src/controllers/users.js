@@ -1,8 +1,8 @@
 require("dotenv").config();
-const { getConn } = require("../database/connection");
-const schema = require('../utils/validation/index')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+const schema = require('../utils/validation/index')
+const { getConn } = require("../database/connection");
 
 // Models
 const User = require("../models/User");
@@ -30,7 +30,7 @@ const registerUser = async (req, res) => {
 
     // Cek Unique
     const cekEmail = await User.findOne({ email: email });
-    if (cekEmail) return res.status(400).json({message: "Email is already in use"})
+    if (cekEmail) return res.status(400).json({message: "Email is already used / banned"})
 
     // Password
     let hashedPassword;
@@ -44,7 +44,6 @@ const registerUser = async (req, res) => {
         password: hashedPassword,
         role: 1,
         status: true,
-        created_at: Date.now(),
     })
     
     console.log("\nUser created successfully\n", newUser, "\n")
@@ -97,14 +96,57 @@ const loginUser = async (req, res) => {
 }
 
 const fetchUser = async (req, res) => {
-    return res.sendStatus(200);
+    const users = await User.find({role: 1, status: true});
+    
+    users.forEach((user) => {user.password = undefined})
+    return res.status(200).json(users);
 }
 
-const getUser = async (req, res) => {}
+const getUser = async (req, res) => {
+    const { email } = req.params;
 
-const updateUser = async (req, res) => {}
+    let user = await User.findOne({email: email, status: true});
+    if (user == null) return res.status(404).json({message: 'User not found'})
 
-const deleteUser = async (req, res) => {}
+    user.password = undefined;
+    return res.status(200).json(user);
+}
+
+const updateUser = async (req, res) => {
+    const { display_name, address, phone_number } = req.body;
+    const { email } = req.params
+    
+    let user = await User.findOne({email: email, status: true});
+    if (user == null) return res.status(404).json({message: 'User not found'})
+
+    if (display_name) {
+        if (display_name.length < 3) return res.status(400).json({message: "Display name must be at least 3 characters"})
+            user.display_name = display_name
+    }
+
+    if (address) user.address = address
+
+    if (phone_number) user.phone_number = phone_number
+
+    await user.save()
+
+    user.password = undefined
+    return res.status(200).json({message: "User updated successfully", data: user})
+}
+
+const deleteUser = async (req, res) => {
+    const { email } = req.params
+
+    let user = await User.findOne({email: email, status: true});
+    if (user == null) return res.status(404).json({message: 'User not found'})
+
+    user.status = false;
+    user.deleted_at = Date.now();
+
+    await user.save()
+
+    return res.status(200).json({message: "User deleted successfully"})
+}
 
 module.exports = {
     registerUser,

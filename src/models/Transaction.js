@@ -14,6 +14,8 @@ const transSchema = new Schema({
         subtotal: Number,
     }],
     status: Number,
+}, {
+    versionKey: false
 });
 
 const Transaction = mongoose.model('Transaction', transSchema);

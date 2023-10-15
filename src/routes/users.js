@@ -16,8 +16,8 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 
 router.get("/", [middleware.verifyJWT], fetchUser);
-router.get("/:user_id", getUser);
-router.put("/update", updateUser);
-router.delete("/:user_id", deleteUser);
+router.get("/:email", [middleware.verifyJWT], getUser);
+router.put("/update/:email", [middleware.verifyJWT], updateUser);
+router.delete("/delete/:email", [middleware.verifyJWT], deleteUser);
 
 module.exports = router;

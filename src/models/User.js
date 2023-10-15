@@ -9,8 +9,6 @@ const userSchema = new Schema({
     phone_number: String,
     role: Number,
     status: Boolean,
-    created_at: Date,
-    updated_at: Date,
     deleted_at: Date,
     carts: [{
         item_id: {type: Schema.Types.ObjectId, ref: 'Item'},
@@ -27,6 +25,8 @@ const userSchema = new Schema({
         time: Date,
         sender: {type: Schema.Types.ObjectId, ref: 'User'}
     }]
+}, {
+    timestamps: {createdAt: 'create_at', updatedAt: 'update_at'}, versionKey: false
 });
 
 const User = mongoose.model('User', userSchema);
