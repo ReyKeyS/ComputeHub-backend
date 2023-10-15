@@ -17,8 +17,10 @@ app.use(
 
 // Routes
 const userRouter = require("./routes/users");
+const itemRouter = require("./routes/items");
 
 app.use('/api/users', userRouter);
+app.use('/api/items', itemRouter)
 
 app.all('*', (req, res) => {
     return res.status(404).json({ message: `Page Not Found!` });
