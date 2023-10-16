@@ -93,10 +93,16 @@ const deleteItem = async (req, res) => {
     return res.status(200).json({message: "Item deleted successfully"})
 }
 
+const addPromoItem = async (req, res) => {}
+
+const deletePromoItem = async (req, res) => {}
+
 module.exports = {
     addItem,
     fetchItem,
     getItem,
     updateItem,
     deleteItem,
+    addPromoItem,
+    deletePromoItem,
 }

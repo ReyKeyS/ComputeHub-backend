@@ -7,6 +7,8 @@ const {
     getItem,
     updateItem,
     deleteItem,
+    addPromoItem,
+    deletePromoItem
 } = require("../controllers/items");
 
 const middleware = require("../middleware");
@@ -16,7 +18,10 @@ router.post("/add", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], a
 router.get("/", fetchItem);
 router.get("/:item_id", getItem);
 
-router.put("/update/:item_id", updateItem);
-router.delete("/delete/:item_id", deleteItem);
+router.put("/update/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], updateItem);
+router.delete("/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deleteItem);
+
+router.put("/promo/add/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], addPromoItem);
+router.put("/promo/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deletePromoItem);
 
 module.exports = router;
