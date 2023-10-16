@@ -7,8 +7,9 @@ const userSchema = new Schema({
     display_name: String,
     address: String,
     phone_number: String,
+    profile_picture: String,
     role: Number,
-    status: Boolean,
+    status: {type: Boolean, default: true},
     deleted_at: Date,
     carts: [{
         item_id: {type: Schema.Types.ObjectId, ref: 'Item'},

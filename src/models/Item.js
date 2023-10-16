@@ -15,7 +15,7 @@ const itemSchema = new Schema({
     category: String,
     brand: String,
     picture: String,
-    status: Boolean,
+    status: {type: Boolean, default: true},
     deleted_at: Date,
 }, {
     timestamps: {createdAt: 'create_at', updatedAt: 'update_at'}, versionKey: false

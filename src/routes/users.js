@@ -15,9 +15,9 @@ const middleware = require("../middleware");
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-router.get("/", [middleware.verifyJWT], fetchUser);
-router.get("/:email", [middleware.verifyJWT], getUser);
-router.put("/update/:email", [middleware.verifyJWT], updateUser);
-router.delete("/delete/:email", [middleware.verifyJWT], deleteUser);
+router.get("/", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], fetchUser);
+router.get("/:email", [ middleware.verifyJWT ], getUser);
+router.put("/update/:email", [ middleware.verifyJWT ], updateUser);
+router.delete("/delete/:email", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deleteUser);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 require("dotenv").config();
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
-const schema = require('../utils/validation/index')
+const jwt = require('jsonwebtoken');
+const schema = require('../utils/validation/index');
 const { getConn } = require("../database/connection");
 
 // Models
@@ -43,7 +43,6 @@ const registerUser = async (req, res) => {
         phone_number: phone_number,
         password: hashedPassword,
         role: 1,
-        status: true,
     })
     
     console.log("\nUser created successfully\n", newUser, "\n")
@@ -85,6 +84,7 @@ const loginUser = async (req, res) => {
     const accessToken = jwt.sign({
             user_id: user._id.toString(),
             email: user.email,
+            role: user.role,
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '1d'}      // Development

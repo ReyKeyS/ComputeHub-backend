@@ -13,6 +13,8 @@ const verifyJWT = (req, res, next) => {
         }
         req.user_id = decoded.user_id;
         req.user_email = decoded.email;
+        req.user_role = decoded.role;
+        console.log(decoded);
         next();
     });
 };
