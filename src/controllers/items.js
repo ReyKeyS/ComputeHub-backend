@@ -40,19 +40,57 @@ const addItem = async (req, res) => {
 }
 
 const fetchItem = async (req, res) => {
+    const items = await Item.find({status: true})
 
+    return res.status(200).json(items)
 }
 
 const getItem = async (req, res) => {
-    
+    const { item_id } = req.params
+
+    const item = await Item.findById(item_id)
+    if (item == null) return res.status(404).json({message: "Item not found"})
+
+    return res.status(200).json(item)
 }
 
 const updateItem = async (req, res) => {
-    
+    const { name, description, price, stock, category, brand } = req.body
+    const { item_id } = req.params
+
+    const item = await Item.findById(item_id)
+    if (item == null) return res.status(404).json({message: "Item not found"})
+
+    if (name) item.name = name
+    if (description) item.description = description
+    if (price){
+        if (isNaN(price)) return res.status(400).json({message: "Price must be a number"})
+        item.price
+    }
+    if (stock){
+        if (isNaN(stock)) return res.status(400).json({message: "Stock must be a number"})
+        item.stock
+    } 
+    if (category) item.category
+    if (brand) item.brand
+
+    await item.save()
+
+    return res.status(200).json({message: "Item saved successfully", data: item})
 }
 
 const deleteItem = async (req, res) => {
+    const { item_id } = req.params
     
+    const item = await Item.findById(item_id)
+    if (item == null) return res.status(404).json({message: "Item not found"})
+
+    item.status = false;
+    item.deleted_at = Date.now();
+
+    await item.save();
+    
+    return res.status(200).json({message: "Item deleted successfully"})
 }
 
 module.exports = {

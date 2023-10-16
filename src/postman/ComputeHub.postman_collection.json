@@ -168,6 +168,312 @@
 			]
 		},
 		{
+			"name": "Item",
+			"item": [
+				{
+					"name": "Add Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "RTX 3060",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is GPU Card",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "3000000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "GPU",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "MSI",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/items/add",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Item",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "RTX 3060",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is GPU Card",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "3000000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "GPU",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "MSI",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/items/",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"items",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Item",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "RTX 3060",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is GPU Card",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "3000000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "GPU",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "MSI",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/items/:item_id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"items",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "652ca8e72b1d09b741e8d93b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "RTX 3060",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is GPU Card",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "3000000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "GPU",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "MSI",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/items/update/:item_id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"update",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "652ca8e72b1d09b741e8d93b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/items/delete/:item_id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"delete",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "652ca8e72b1d09b741e8d93b"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Register",
 			"request": {
 				"method": "POST",
