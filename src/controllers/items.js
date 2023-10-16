@@ -93,9 +93,54 @@ const deleteItem = async (req, res) => {
     return res.status(200).json({message: "Item deleted successfully"})
 }
 
-const addPromoItem = async (req, res) => {}
+const addPromoItem = async (req, res) => {
+    const { promo_price, start_date, end_date } = req.body
+    const { item_id } = req.params
 
-const deletePromoItem = async (req, res) => {}
+    const item = await Item.findById(item_id)
+    if (item == null) return res.status(404).json({message: "Item not found"})
+    
+    // Validation
+    try {
+        let result = await schema.addPromoSchema.validateAsync(req.body, {
+            abortEarly: false,
+        })
+    } catch (error) {
+        const processedResult = error.details.reduce((hasil, item) => {
+            const key = item.context.key || item.context.main;
+            if (key in hasil) {
+                hasil[key].push(item.message.replace("\"", "").replace("\"", ""));
+            } else {
+                hasil[key] = [item.message.replace("\"", "").replace("\"", "")];
+            }
+            return hasil;
+        }, {});
+        return res.status(400).json({ msg: "Validation failed", payload: processedResult });
+    }
+
+    item.discount = {
+        promo_price: promo_price,
+        start_date: start_date,
+        end_date: end_date
+    }
+
+    item.save();
+
+    return res.status(201).json({message: "Promo has been added", item: item})
+}
+
+const deletePromoItem = async (req, res) => {
+    const { item_id } = req.params
+    
+    const item = await Item.findById(item_id)
+    if (item == null) return res.status(404).json({message: "Item not found"})
+
+    item.discount = undefined
+
+    await item.save();
+    
+    return res.status(200).json({message: "Promo has been deleted", item: item})
+}
 
 module.exports = {
     addItem,

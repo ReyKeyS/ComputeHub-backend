@@ -367,7 +367,7 @@
 							"variable": [
 								{
 									"key": "item_id",
-									"value": "652ca8e72b1d09b741e8d93b"
+									"value": "652ce03373ff93057872c5e7"
 								}
 							]
 						}
@@ -465,6 +465,100 @@
 								{
 									"key": "item_id",
 									"value": "652ca8e72b1d09b741e8d93b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Promo Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "promo_price",
+									"value": "3500000",
+									"type": "text"
+								},
+								{
+									"key": "start_date",
+									"value": "2023-10-16",
+									"type": "text"
+								},
+								{
+									"key": "end_date",
+									"value": "2023-10-17",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/items/promo/add/:item_id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"promo",
+								"add",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "652ce03373ff93057872c5e7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Promo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/items/promo/delete/:item_id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"promo",
+								"delete",
+								":item_id"
+							],
+							"variable": [
+								{
+									"key": "item_id",
+									"value": "652ce03373ff93057872c5e7"
 								}
 							]
 						}

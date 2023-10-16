@@ -22,6 +22,6 @@ router.put("/update/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRol
 router.delete("/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deleteItem);
 
 router.put("/promo/add/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], addPromoItem);
-router.put("/promo/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deletePromoItem);
+router.delete("/promo/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deletePromoItem);
 
 module.exports = router;
