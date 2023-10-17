@@ -65,11 +65,11 @@ const updateItem = async (req, res) => {
     if (description) item.description = description
     if (price){
         if (isNaN(price)) return res.status(400).json({message: "Price must be a number"})
-        item.price
+        item.price = price
     }
     if (stock){
         if (isNaN(stock)) return res.status(400).json({message: "Stock must be a number"})
-        item.stock
+        item.stock = stock
     } 
     if (category) item.category
     if (brand) item.brand
