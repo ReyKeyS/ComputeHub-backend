@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+const env = require("../config/env.config");
 let connection = null;
 
 async function connect(){
     try {
-        connection = await mongoose.connect('mongodb+srv://computehub:pRV17marYSO2HxKh@computehub.pkauzod.mongodb.net/ComputeHub?retryWrites=true&w=majority')
+        connection = await mongoose.connect(env('CON_STRING'))
         console.log("Connection successful!");
     } catch (error) {
         console.error("Connection failed\n", error);
