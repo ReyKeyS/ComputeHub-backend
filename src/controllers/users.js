@@ -92,7 +92,7 @@ const loginUser = async (req, res) => {
     )
 
     console.log("\nUser login Successfull\n", {token: accessToken}, "\n")
-    return res.status(200).json({message: "User login successfully", data: {user: user.email, token: accessToken}})
+    return res.status(200).json({message: "User login successfully", data: {user: user.email, role:user.role, token: accessToken}})
 }
 
 const fetchUser = async (req, res) => {
