@@ -40,7 +40,9 @@ const addItem = async (req, res) => {
 }
 
 const fetchItem = async (req, res) => {
-    const items = await Item.find({status: true})
+    const { search, harga_min, harga_max } = req.query
+
+    const items = await Item.find({name: { $regex: search, $options: 'i' }, price: {$gte: harga_min, $lte: harga_max}, status: true})
 
     return res.status(200).json(items)
 }
