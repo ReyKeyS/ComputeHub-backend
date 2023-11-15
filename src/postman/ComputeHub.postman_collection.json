@@ -66,7 +66,7 @@
 							"variable": [
 								{
 									"key": "email",
-									"value": "sakul@gmail.com"
+									"value": "ryk@gmail.com"
 								}
 							]
 						}
@@ -241,61 +241,36 @@
 					},
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{AccessToken}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "name",
-									"value": "RTX 3060",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "This is GPU Card",
-									"type": "text"
-								},
-								{
-									"key": "price",
-									"value": "3000000",
-									"type": "text"
-								},
-								{
-									"key": "stock",
-									"value": "2",
-									"type": "text"
-								},
-								{
-									"key": "category",
-									"value": "GPU",
-									"type": "text"
-								},
-								{
-									"key": "brand",
-									"value": "MSI",
-									"type": "text"
-								}
-							]
+							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{HOST}}/api/items/",
+							"raw": "{{HOST}}/api/items?search=&harga_min=0&harga_max=9999999999999999999",
 							"host": [
 								"{{HOST}}"
 							],
 							"path": [
 								"api",
-								"items",
-								""
+								"items"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "harga_min",
+									"value": "0"
+								},
+								{
+									"key": "harga_max",
+									"value": "9999999999999999999"
+								}
 							]
 						}
 					},
@@ -491,17 +466,17 @@
 							"urlencoded": [
 								{
 									"key": "promo_price",
-									"value": "3500000",
+									"value": "2500000",
 									"type": "text"
 								},
 								{
 									"key": "start_date",
-									"value": "2023-10-16",
+									"value": "2023-11-16",
 									"type": "text"
 								},
 								{
 									"key": "end_date",
-									"value": "2023-10-17",
+									"value": "2023-11-18",
 									"type": "text"
 								}
 							]
@@ -560,6 +535,209 @@
 									"key": "item_id",
 									"value": "652ce03373ff93057872c5e7"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Add To Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"item_id\": \"652ce03373ff93057872c5e7\",\r\n            \"amount\": 2\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/api/users/carts/add",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"carts",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Carts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/users/carts/fetch",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"carts",
+								"fetch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "amount",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/users/carts/edit/:id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"carts",
+								"edit",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6554dd98b6ea894a48e51f43"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/users/carts/remove/:id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"carts",
+								"remove",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6554e8e57bb0cce9f4603820"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Purchase Items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "build_service",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/users/transaction/purchase",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"transaction",
+								"purchase"
 							]
 						}
 					},
