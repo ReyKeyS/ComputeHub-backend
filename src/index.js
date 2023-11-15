@@ -19,10 +19,12 @@ app.use(
 const userRouter = require("./routes/users");
 const itemRouter = require("./routes/items");
 const cartsRouter = require("./routes/carts");
+const transRouter = require("./routes/trans");
 
 app.use('/api/users', userRouter);
 app.use('/api/items', itemRouter);
 app.use('/api/users/carts', cartsRouter);
+app.use('/api/users/transaction', transRouter);
 
 app.all('*', (req, res) => {
     return res.status(404).json({ message: `Page Not Found!` });

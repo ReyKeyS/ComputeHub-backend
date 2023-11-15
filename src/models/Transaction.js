@@ -6,6 +6,7 @@ const transSchema = new Schema({
     invoice: String,
     trans_date: Date,
     build_pc: Boolean,
+    grand_total: Number,
     detail_trans: [{
         item_id: {type: Schema.Types.ObjectId, ref: 'Item'},
         name: String,
