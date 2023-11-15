@@ -91,7 +91,7 @@ const loginUser = async (req, res) => {
         // { expiresIn: '5m'}   // Production
     )
 
-    console.log("\nUser login Successfull\n", {token: accessToken}, "\n")
+    console.log("\nUser login Successfull\n", {user: user.email, role:user.role, token: accessToken}, "\n")
     return res.status(200).json({message: "User login successfully", data: {user: user.email, role:user.role, token: accessToken}})
 }
 
