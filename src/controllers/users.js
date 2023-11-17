@@ -1,6 +1,10 @@
 require("dotenv").config();
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 const schema = require('../utils/validation/index');
 const { getConn } = require("../database/connection");
 
@@ -42,6 +46,7 @@ const registerUser = async (req, res) => {
         address: address,
         phone_number: phone_number,
         password: hashedPassword,
+        profile_picture: "default.png",
         role: 1,
     })
     
@@ -134,6 +139,30 @@ const updateUser = async (req, res) => {
     return res.status(200).json({message: "User updated successfully", data: user})
 }
 
+const updateProfPict = async (req, res) => {
+    const { email } = req.params
+    
+    const user = await User.findOne({email: email, status: true})
+    if (user == null) return res.status(404).json({message: 'User not found'})
+    
+    req.id_user = user._id
+
+    const uploadingFile = await upload.single("picture");
+    uploadingFile(req, res, async (err) => {
+        if (err) {
+            console.log(err);
+            return res
+                .status(400)
+                .send((err.message || err.code) + " pada field " + err.field);
+        }
+
+        user.profile_picture = req.namaFile
+        await user.save();
+
+        return res.status(200).json({message: "Profile picture saved"})
+    })   
+}
+
 const deleteUser = async (req, res) => {
     const { email } = req.params
 
@@ -154,5 +183,62 @@ module.exports = {
     fetchUser,
     getUser,
     updateUser,
+    updateProfPict,
     deleteUser,
 }
+
+
+
+// Function multer
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        const folderName = `uploads/Profile`;
+
+        if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName, { recursive: true });
+        }
+
+        callback(null, folderName);
+    },
+    filename: (req, file, callback) => {
+        const fileExtension = path.extname(file.originalname).toLowerCase();
+
+        if (file.fieldname == "picture") {
+            let namaFile = `profile_${req.id_user}${fileExtension}`;
+            req.namaFile = namaFile
+            callback(null, namaFile);
+        } else {
+            callback(null, false);
+        }
+    },
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 10000000, // 10mb
+    },
+    fileFilter: (req, file, callback) => {
+        // buat aturan dalam bentuk regex, mengenai extension apa saja yang diperbolehkan
+        const rules = /jpeg|jpg|png/;
+
+        const fileExtension = path.extname(file.originalname).toLowerCase();
+        const fileMimeType = file.mimetype;
+
+        const cekExt = rules.test(fileExtension);
+        const cekMime = rules.test(fileMimeType);
+
+        if (cekExt && cekMime) {
+            req.fileExt = fileExtension
+            callback(null, true);
+        } else {
+            callback(null, false);
+            return callback(
+                new multer.MulterError(
+                    "Tipe file harus .jpg, .jpeg, atau .png",
+                    file.fieldname
+                )
+            );
+        }
+    },
+});

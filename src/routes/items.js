@@ -8,7 +8,7 @@ const {
     updateItem,
     deleteItem,
     addPromoItem,
-    deletePromoItem
+    deletePromoItem,
 } = require("../controllers/items");
 
 const middleware = require("../middleware");
@@ -23,5 +23,6 @@ router.delete("/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cek
 
 router.put("/promo/add/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], addPromoItem);
 router.delete("/promo/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deletePromoItem);
+
 
 module.exports = router;

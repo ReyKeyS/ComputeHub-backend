@@ -1,4 +1,8 @@
 require("dotenv").config();
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+
 const schema = require('../utils/validation/index');
 const { getConn } = require("../database/connection");
 
@@ -6,37 +10,54 @@ const { getConn } = require("../database/connection");
 const Item = require("../models/Item");
 
 const addItem = async (req, res) => {
-    const { name, description, price, stock, category, brand } = req.body   // kurang picture
+    const newID = await Item.create({})
+    req.id_item = newID._id;
 
-    // Validation
     try {
-        let result = await schema.addItemSchema.validateAsync(req.body, {
-            abortEarly: false,
-        })
-    } catch (error) {
-        const processedResult = error.details.reduce((hasil, item) => {
-            const key = item.context.key || item.context.main;
-            if (key in hasil) {
-                hasil[key].push(item.message.replace("\"", "").replace("\"", ""));
-            } else {
-                hasil[key] = [item.message.replace("\"", "").replace("\"", "")];
+        const uploadingFile = await upload.single("picture");
+        uploadingFile(req, res, async (err) => {
+            if (err) {
+                console.log(err);
+                return res
+                    .status(400)
+                    .send((err.message || err.code) + " pada field " + err.field);
             }
-            return hasil;
-        }, {});
-        return res.status(400).json({ msg: "Validation failed", payload: processedResult });
-    }
 
-    const newItem = await Item.create({
-        name: name,
-        description: description,
-        price: price,
-        stock: stock, 
-        category: category,
-        brand: brand
-    })
-    
-    console.log("\nItem created successfully\n", newItem, "\n")
-    return res.status(201).json({message: "Item created successfully", data: newItem})
+            const { name, description, price, stock, category, brand } = req.body
+            // Validation
+            try {
+                let result = await schema.addItemSchema.validateAsync(req.body, {
+                    abortEarly: false,
+                })
+            } catch (error) {
+                const processedResult = error.details.reduce((hasil, item) => {
+                    const key = item.context.key || item.context.main;
+                    if (key in hasil) {
+                        hasil[key].push(item.message.replace("\"", "").replace("\"", ""));
+                    } else {
+                        hasil[key] = [item.message.replace("\"", "").replace("\"", "")];
+                    }
+                    return hasil;
+                }, {});
+                return res.status(400).json({ msg: "Validation failed", payload: processedResult });
+            }
+
+            let newItem = await Item.findById(newID._id)
+            newItem.name = name
+            newItem.description = description
+            newItem.price = price
+            newItem.stock = stock
+            newItem.category = category
+            newItem.brand = brand
+            newItem.picture = req.namaFile
+            await newItem.save();
+           
+            console.log("\nItem created successfully\n", newItem, "\n")
+            return res.status(201).json({message: "Item created successfully", data: newItem})
+        })        
+    } catch (error) {
+        return res.status(400).json({message: "Input invalid!"})   
+    }
 }
 
 const fetchItem = async (req, res) => {
@@ -153,3 +174,59 @@ module.exports = {
     addPromoItem,
     deletePromoItem,
 }
+
+
+
+// Function multer
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        const folderName = `uploads/Items`;
+
+        if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName, { recursive: true });
+        }
+
+        callback(null, folderName);
+    },
+    filename: (req, file, callback) => {
+        const fileExtension = path.extname(file.originalname).toLowerCase();
+
+        if (file.fieldname == "picture") {
+            let namaFile = `item_${req.id_item}${fileExtension}`;
+            req.namaFile = namaFile
+            callback(null, namaFile);
+        } else {
+            callback(null, false);
+        }
+    },
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 10000000, // 10mb
+    },
+    fileFilter: (req, file, callback) => {
+        // buat aturan dalam bentuk regex, mengenai extension apa saja yang diperbolehkan
+        const rules = /jpeg|jpg|png/;
+
+        const fileExtension = path.extname(file.originalname).toLowerCase();
+        const fileMimeType = file.mimetype;
+
+        const cekExt = rules.test(fileExtension);
+        const cekMime = rules.test(fileMimeType);
+
+        if (cekExt && cekMime) {
+            req.fileExt = fileExtension
+            callback(null, true);
+        } else {
+            callback(null, false);
+            return callback(
+                new multer.MulterError(
+                    "Tipe file harus .jpg, .jpeg, atau .png",
+                    file.fieldname
+                )
+            );
+        }
+    },
+});

@@ -1,6 +1,7 @@
 const express = require("express");
 const env = require("./config/env.config");
 const cors = require("cors");
+const fs = require("fs");
 const { connect, getConn } = require('./database/connection');
 
 const app = express();
@@ -25,6 +26,21 @@ app.use('/api/users', userRouter);
 app.use('/api/items', itemRouter);
 app.use('/api/users/carts', cartsRouter);
 app.use('/api/users/transaction', transRouter);
+
+// Get Any Picture
+app.get('/api/getpict', (req, res) => {
+    const { file } = req.query
+
+    let lokasinya = 'uploads/';
+    if (file.includes("item")) lokasinya += "Items/";
+    else if (file.includes("profile")) lokasinya += "Profile/";
+
+    lokasinya += file
+    if (fs.existsSync(lokasinya))
+        return res.status(200).sendFile(lokasinya, { root: "." });
+    else 
+        return res.status(404).json({message: "Picture not found"})
+})
 
 app.all('*', (req, res) => {
     return res.status(404).json({ message: `Page Not Found!` });
