@@ -164,6 +164,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update Profile Picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/D:/Data/.ISTTS/.Sem 5/Software Development Project - SDP/Projects/inputPicture/sukuna.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/users/updateprofpict/:email",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"updateprofpict",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "ryk@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -186,8 +232,8 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
+							"mode": "formdata",
+							"formdata": [
 								{
 									"key": "name",
 									"value": "RTX 3060",
@@ -217,6 +263,11 @@
 									"key": "brand",
 									"value": "MSI",
 									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/D:/Data/.ISTTS/.Sem 5/Software Development Project - SDP/Projects/inputPicture/download.jpeg"
 								}
 							]
 						},
@@ -882,6 +933,30 @@
 						"api",
 						"users",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Picture",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/api/getpict?file=profile_652c08ad39210e96ddb5fb61.jpg",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"getpict"
+					],
+					"query": [
+						{
+							"key": "file",
+							"value": "profile_652c08ad39210e96ddb5fb61.jpg"
+						}
 					]
 				}
 			},
