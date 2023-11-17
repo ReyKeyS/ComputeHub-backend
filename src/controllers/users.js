@@ -5,6 +5,7 @@ const path = require("path");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const env = require("../config/env.config")
 const schema = require('../utils/validation/index');
 const { getConn } = require("../database/connection");
 
@@ -91,7 +92,7 @@ const loginUser = async (req, res) => {
             email: user.email,
             role: user.role,
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        env("ACCESS_TOKEN_SECRET"),
         { expiresIn: '1d'}      // Development
         // { expiresIn: '5m'}   // Production
     )

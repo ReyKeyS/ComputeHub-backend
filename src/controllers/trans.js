@@ -1,7 +1,9 @@
 require("dotenv").config();
+const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const schema = require('../utils/validation/index');
 const { getConn } = require("../database/connection");
+const env = require("../config/env.config");
 
 // Models
 const User = require("../models/User");
@@ -55,7 +57,7 @@ const purchaseItems = async (req, res) => {
         build_pc: build_service,
         grand_total: grand_total,
         detail_trans: detailTrans,
-        status: 0
+        status: 2
     });
 
     user.transactions.push({
@@ -68,10 +70,75 @@ const purchaseItems = async (req, res) => {
 
     await user.save();
 
-    console.log("\nTrans created successfully\n", newTrans, "\n")
-    return res.status(201).json({message: "Items purchased", data: newTrans})
+    // Midtrans SNAP
+    const option = {
+        method: 'POST',
+        url: "https://app.sandbox.midtrans.com/snap/v1/transactions",
+        headers: {accept: 'application/json', 'content-type': 'application/json',
+            authorization: 'Basic '+Buffer.from(env("SERVER_KEY")).toString("base64")
+        },
+        data: {
+            transaction_details: {
+                order_id: newInv,
+                gross_amount: grand_total,
+            },
+            customer_details: {
+                email: user.email
+            },
+            credit_card: {secure: true},
+            // callbacks: { finish: 'http://localhost:3000/api/users/transaction/update'} // Untuk Frontend ternyata ehe
+        }
+    }
+    await axios.request(option).then( async (response)=>{
+        console.log("\nTrans created successfully\n", newTrans, "\n")
+        return res.status(201).json({message: "Requested Payment", data: newTrans, midtrans: response.data})
+    })
+}
+
+// Optional
+const getStatusTrans = async (req, res) => {
+    const { inv } = req.params
+    
+    const options = {
+        method: 'GET',
+        url: `https://api.sandbox.midtrans.com/v2/${inv}/status`,
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            authorization: 'Basic ' + Buffer.from(env("SERVER_KEY")).toString("base64")
+        }
+    };
+
+    axios.request(options).then(async response => {
+        console.log(response);
+        return res.status(200).json({
+            invoice: response.data.invoice,
+            transaction_status: response.data.transaction_status,
+        })
+    }).catch(err => {
+        return res.status(502).json(err.message)
+    })
+}
+
+// API for completing transaction
+const updateTrans = async (req, res) => {
+    const { transaction_status, order_id } = req.query;
+
+    if (!transaction_status || !order_id) return res.status(403).json({ message: `Forbidden` });
+    
+    let status = transaction_status === 'settlement' ? 1 : transaction_status === 'pending' ? 2 : 0;
+    let trans = await Transaction.findOne({invoice: order_id});
+
+    trans.status = status
+    trans.payment_date = Date.now();
+
+    await trans.save();
+
+    return res.status(200).json({ message: 'Ok' });
 }
 
 module.exports = {
     purchaseItems,
+    getStatusTrans,
+    updateTrans,
 }

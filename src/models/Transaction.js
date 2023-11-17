@@ -14,6 +14,7 @@ const transSchema = new Schema({
         qty: Number,
         subtotal: Number,
     }],
+    payment_date: Date,
     status: Number,
 }, {
     versionKey: false
