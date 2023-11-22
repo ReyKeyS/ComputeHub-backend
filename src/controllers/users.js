@@ -50,10 +50,10 @@ const registerUser = async (req, res) => {
         password: hashedPassword,
         profile_picture: "default.png",
         role: 1,
-        email_verified: 0,
+        email_verified: false,
     })
     
-    const token = jwt.sign({ email: email }, env("SECRET_KEY"), { expiresIn: "365d" });
+    const token = jwt.sign({ email: email }, env("ACCESS_TOKEN_SECRET"), { expiresIn: "365d" });
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -66,9 +66,10 @@ const registerUser = async (req, res) => {
         from: env("EMAIL_ADDRESS"),
         to: email,
         subject: 'Verify your ComputeHub registration account',
-        text: `Click link below to verify your account http://${ env("HOST") }/api/users/verify/${ token }`
+        text: `Click link below to verify your account http://${ env("HOST") }:3000/api/users/verifyemail/${ token }`
     };
     
+    let responseMailer = ""
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error('Error sending email:', error);
@@ -78,7 +79,7 @@ const registerUser = async (req, res) => {
     });
 
     console.log("\nUser created successfully\n", newUser, "\n")
-    return res.status(201).json({message: "User created successfully", data: newUser})
+    return res.status(201).json({message: "User created successfully", data: newUser, mailer: `http://${ env("HOST") }:3000/api/users/verifyemail/${ token }`})
 }
 
 const loginUser = async (req, res) => {
@@ -204,8 +205,22 @@ const deleteUser = async (req, res) => {
     return res.status(200).json({message: "User deleted successfully"})
 }
 
-const verifyEmail = async(req,res)=>{
+const verifyEmail = async ( req, res )=>{
     const { token } = req.params
+
+    jwt.verify(token, env("ACCESS_TOKEN_SECRET"), async (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: "Invalid Token" });
+        }
+
+        const user = await User.findOne({ email: decoded.email, status: true})
+        if (user == null) return res.status(404).json({message: "User not found"})
+
+        user.email_verified = true
+        await user.save();
+
+        return res.sendStatus(200);
+    });
 }
 
 module.exports = {
