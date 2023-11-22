@@ -50,8 +50,33 @@ const registerUser = async (req, res) => {
         password: hashedPassword,
         profile_picture: "default.png",
         role: 1,
+        email_verified: 0,
     })
     
+    const token = jwt.sign({ email: email }, env("SECRET_KEY"), { expiresIn: "365d" });
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: env("EMAIL_ADDRESS"),
+            pass: env("EMAIL_PASSWORD")
+        }
+    });
+    
+    const mailOptions = {
+        from: env("EMAIL_ADDRESS"),
+        to: email,
+        subject: 'Verify your ComputeHub registration account',
+        text: `Click link below to verify your account http://${ env("HOST") }/api/users/verify/${ token }`
+    };
+    
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            console.log('Email sent:', info.response);
+        }
+    });
+
     console.log("\nUser created successfully\n", newUser, "\n")
     return res.status(201).json({message: "User created successfully", data: newUser})
 }
@@ -179,6 +204,10 @@ const deleteUser = async (req, res) => {
     return res.status(200).json({message: "User deleted successfully"})
 }
 
+const verifyEmail = async(req,res)=>{
+    const { token } = req.params
+}
+
 module.exports = {
     registerUser,
     loginUser,
@@ -187,6 +216,7 @@ module.exports = {
     updateUser,
     updateProfPict,
     deleteUser,
+    verifyEmail
 }
 
 
