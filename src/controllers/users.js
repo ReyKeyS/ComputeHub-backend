@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const env = require("../config/env.config")
 const schema = require('../utils/validation/index');
 const { getConn } = require("../database/connection");
+const nodemailer = require('nodemailer');
 
 // Models
 const User = require("../models/User");
