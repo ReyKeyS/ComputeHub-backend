@@ -210,6 +210,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Verify Email",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/users/verifyemail/:token",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"verifyemail",
+								":token"
+							],
+							"variable": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJ5a3MuNDkwM0BnbWFpbC5jb20iLCJpYXQiOjE3MDA2NjU2MTIsImV4cCI6MTczMjIwMTYxMn0.MmgIt0tEFG9w_txxxleJOq1EE6InwOS9XZvwsgjAiN8"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -613,7 +639,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"item_id\": \"652ce03373ff93057872c5e7\",\r\n            \"amount\": 2\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"item_id\": \"652ce03373ff93057872c5e7\",\r\n            \"amount\": 2\r\n        },\r\n        {\r\n            \"item_id\": \"6556e468411b4a3d620b9c48\",\r\n            \"amount\": 1\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -789,6 +815,77 @@
 								"users",
 								"transaction",
 								"purchase"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/users/transaction/status/:inv",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"transaction",
+								"status",
+								":inv"
+							],
+							"variable": [
+								{
+									"key": "inv",
+									"value": "INV20231017003"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Transaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/api/users/transaction/update?order_id=INV20231017006&status_code=200&transaction_status=settlement",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"transaction",
+								"update"
+							],
+							"query": [
+								{
+									"key": "order_id",
+									"value": "INV20231017006"
+								},
+								{
+									"key": "status_code",
+									"value": "200"
+								},
+								{
+									"key": "transaction_status",
+									"value": "settlement"
+								}
 							]
 						}
 					},
