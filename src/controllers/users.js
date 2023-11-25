@@ -66,13 +66,13 @@ const registerUser = async (req, res) => {
         from: env("EMAIL_ADDRESS"),
         to: email,
         subject: 'Verify Your ComputeHUB Account & Unlock Exclusive Benefits + Special Offer Inside!',
-        text: `<p class="text-lg font-bold text-blue-700">Thank you for joining ComputeHUB, your premier destination for all things computing! We're excited to have you on board, and to ensure you have the best possible experience, we kindly ask you to verify your email address.</p>
+        text: `Thank you for joining ComputeHUB, your premier destination for all things computing! We're excited to have you on board, and to ensure you have the best possible experience, we kindly ask you to verify your email address.
 
-        <p class="text-lg">To complete the verification process, simply click on the following link:</p>
+        To complete the verification process, simply click on the following link: 
         
-        <a class="text-blue-500 hover:underline" href="http://${env("HOST")}:3000/api/users/verifyemail/${token}">Verification Link</a>
+        Verification Link: http://${ env("HOST") }:3000/api/users/verifyemail/${ token }
         
-        <p class="text-lg">By verifying your email, you're not just adding an extra layer of security to your ComputeHUB account, but you're also opening the door to a world of exclusive benefits. Get ready for early access to promotions, personalized product recommendations, and members-only discounts!</p>
+        By verifying your email, you're not just adding an extra layer of security to your ComputeHUB account, but you're also opening the door to a world of exclusive benefits. Get ready for early access to promotions, personalized product recommendations, and members-only discounts!
         
         With a vast selection of top-of-the-line computers, accessories, and cutting-edge gadgets, ComputeHUB is your one-stop-shop for all your computing needs. Whether you're a tech enthusiast or a casual user, our curated collection has something for everyone.
         
@@ -86,9 +86,11 @@ const registerUser = async (req, res) => {
         
         If you didn't sign up for a ComputeHUB account, please disregard this email. Your security is our priority, and we take all necessary measures to protect your information.
         
-        <p class="text-lg">Thank you for choosing ComputeHUB. We can't wait to serve you and provide an exceptional shopping experience.</p>
+        Thank you for choosing ComputeHUB. We can't wait to serve you and provide an exceptional shopping experience.
         
-        <p class="text-lg font-bold text-blue-700">Best Regards, ComputeHUB Team</p>`
+        Best Regards,
+        
+        ComputeHUB Team`
     };
     
     let responseMailer = ""
