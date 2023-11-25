@@ -65,8 +65,32 @@ const registerUser = async (req, res) => {
     const mailOptions = {
         from: env("EMAIL_ADDRESS"),
         to: email,
-        subject: 'Verify your ComputeHub registration account',
-        text: `Click link below to verify your account http://${ env("HOST") }:3000/api/users/verifyemail/${ token }`
+        subject: 'Verify Your ComputeHUB Account & Unlock Exclusive Benefits + Special Offer Inside!',
+        text: `Thank you for joining ComputeHUB, your premier destination for all things computing! We're excited to have you on board, and to ensure you have the best possible experience, we kindly ask you to verify your email address.
+
+        To complete the verification process, simply click on the following link: 
+        
+        Verification Link: http://${ env("HOST") }:3000/api/users/verifyemail/${ token }
+        
+        By verifying your email, you're not just adding an extra layer of security to your ComputeHUB account, but you're also opening the door to a world of exclusive benefits. Get ready for early access to promotions, personalized product recommendations, and members-only discounts!
+        
+        With a vast selection of top-of-the-line computers, accessories, and cutting-edge gadgets, ComputeHUB is your one-stop-shop for all your computing needs. Whether you're a tech enthusiast or a casual user, our curated collection has something for everyone.
+        
+        Here's a sneak peek of what awaits you on ComputeHUB:
+        
+        Latest Technology: Stay ahead with the newest releases in the tech world.
+        Expert Reviews: Make informed decisions with our detailed product reviews.
+        Fast & Secure Checkout: Enjoy a hassle-free shopping experience with our secure payment gateway.
+        Dedicated Customer Support: Our team is here to assist you every step of the way.
+        Remember, this special offer is valid for a limited time, so don't miss out! Verify your email, explore ComputeHUB, and treat yourself to the latest and greatest in computing technology.
+        
+        If you didn't sign up for a ComputeHUB account, please disregard this email. Your security is our priority, and we take all necessary measures to protect your information.
+        
+        Thank you for choosing ComputeHUB. We can't wait to serve you and provide an exceptional shopping experience.
+        
+        Best Regards,
+        
+        ComputeHUB Team`
     };
     
     let responseMailer = ""
