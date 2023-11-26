@@ -93,21 +93,34 @@ const registerUser = async (req, res) => {
         text-indent: 3rem;
         ">Your premier destination for all things computing! We're excited to have you on board, and to ensure you have the best possible experience, we kindly ask you to verify your email address.
 
-        To complete the verification process, simply click on the following link: 
         
-        Verification Link: 
+        <br/>
+        <div style="
+        width:100%;
+        display: grid;
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color:#1b1b1b;
+        text-align: center;
+        ">
+        To complete the verification process, simply click on the following link: 
         <a href='http://${ env("HOST") }:3000/api/users/verifyemail/${ token }' style="
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+        margin-left:auto;
+        margin-right:auto;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
         color:#1b1b1b;
         background-color:#ffa31a;
         border-radius: 0.5rem;
         text-decoration-line: none;
-        font-weight: 600;
+        font-weight: 700;
+        font-size: 1.5rem;
+        line-height: 2rem; 
         ">Verify</a>
         </p>
+        </div>
 
         <p style="
         font-size: 1.125rem;
