@@ -66,31 +66,102 @@ const registerUser = async (req, res) => {
         from: env("EMAIL_ADDRESS"),
         to: email,
         subject: 'Verify Your ComputeHUB Account & Unlock Exclusive Benefits + Special Offer Inside!',
-        text: `Thank you for joining ComputeHUB, your premier destination for all things computing! We're excited to have you on board, and to ensure you have the best possible experience, we kindly ask you to verify your email address.
+        html: `
+        <p style="text-align: center;
+        font-size: 3.75rem;
+        line-height: 1;
+        color:#1b1b1b;
+        ">Thank you for joining <div style="background-color:#1b1b1b;
+        color:#ffffff;
+        border-radius:1.25rem; 
+        font-size: 3.75rem;
+        line-height: 1;
+        width: fit-content;
+        margin-left:auto;
+        margin-right:auto;
+        padding:0.75rem;
+        ">Compute<span style="background-color:#ffa31a;
+        font-weight:700;
+        border-radius: 0.5rem;
+        color:#1b1b1b;
+        ">HUB</span></div></p>
+
+        <p style="
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color:#1b1b1b;
+        text-indent: 3rem;
+        ">Your premier destination for all things computing! We're excited to have you on board, and to ensure you have the best possible experience, we kindly ask you to verify your email address.
 
         To complete the verification process, simply click on the following link: 
         
-        Verification Link: http://${ env("HOST") }:3000/api/users/verifyemail/${ token }
-        
+        Verification Link: 
+        <a href='http://${ env("HOST") }:3000/api/users/verifyemail/${ token }' style="
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        color:#1b1b1b;
+        background-color:#ffa31a;
+        border-radius: 0.5rem;
+        text-decoration-line: none;
+        font-weight: 600;
+        ">Verify</a>
+        </p>
+
+        <p style="
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color:#1b1b1b;
+        text-indent: 3rem;
+        ">
         By verifying your email, you're not just adding an extra layer of security to your ComputeHUB account, but you're also opening the door to a world of exclusive benefits. Get ready for early access to promotions, personalized product recommendations, and members-only discounts!
         
         With a vast selection of top-of-the-line computers, accessories, and cutting-edge gadgets, ComputeHUB is your one-stop-shop for all your computing needs. Whether you're a tech enthusiast or a casual user, our curated collection has something for everyone.
         
         Here's a sneak peek of what awaits you on ComputeHUB:
+        <ul style="
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color:#1b1b1b;
+        ">
+        <li>Latest Technology: Stay ahead with the newest releases in the tech world.</li>
+        <li>Expert Reviews: Make informed decisions with our detailed product reviews.</li>
+        <li>Fast & Secure Checkout: Enjoy a hassle-free shopping experience with our secure payment gateway.</li>
+        <li>Dedicated Customer Support: Our team is here to assist you every step of the way</li>
+        </ul>
         
-        Latest Technology: Stay ahead with the newest releases in the tech world.
-        Expert Reviews: Make informed decisions with our detailed product reviews.
-        Fast & Secure Checkout: Enjoy a hassle-free shopping experience with our secure payment gateway.
-        Dedicated Customer Support: Our team is here to assist you every step of the way.
+        </p>
+        <p style="
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color:#1b1b1b;
+        text-indent: 3rem;
+        ">
         Remember, this special offer is valid for a limited time, so don't miss out! Verify your email, explore ComputeHUB, and treat yourself to the latest and greatest in computing technology.
-        
+
         If you didn't sign up for a ComputeHUB account, please disregard this email. Your security is our priority, and we take all necessary measures to protect your information.
         
         Thank you for choosing ComputeHUB. We can't wait to serve you and provide an exceptional shopping experience.
-        
+        </p>
+
+        <span style="
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color:#1b1b1b;
+        ">
         Best Regards,
-        
-        ComputeHUB Team`
+        </span>
+        <br/>
+        <br/>
+        <span style="
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color:#1b1b1b;
+        ">
+        ComputeHUB Team
+        </span>
+        `
     };
     
     let responseMailer = ""
