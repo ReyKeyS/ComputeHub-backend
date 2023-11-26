@@ -13,18 +13,6 @@ const addPromoSchema = Joi.object({
         .messages({ 
             "any.required": "{{label}} is required",
         }),
-    start_date: Joi.date()
-        .required()
-        .label("Start Date")
-        .messages({ 
-            "any.required": "{{label}} is required",
-        }),
-    end_date: Joi.date()
-        .required()
-        .label("End Date")
-        .messages({ 
-            "any.required": "{{label}} is required",
-        }),
 })
 
 module.exports = addPromoSchema;
