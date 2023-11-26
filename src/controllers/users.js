@@ -244,9 +244,7 @@ const fetchUser = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
-    const { email } = req.params;
-
-    let user = await User.findOne({email: email, status: true});
+    let user = await User.findOne({email: req.user_email, status: true});
     if (user == null) return res.status(404).json({message: 'User not found'})
 
     user.password = undefined;
