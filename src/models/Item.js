@@ -7,6 +7,7 @@ const itemSchema = new Schema({
     price: Number,
     stock: Number,
     discount: {
+        promo_name: String,
         promo_price: Number,
         start_date: Date,
         end_date: Date,

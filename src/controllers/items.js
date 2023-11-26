@@ -121,7 +121,7 @@ const deleteItem = async (req, res) => {
 }
 
 const addPromoItem = async (req, res) => {
-    const { promo_price, start_date, end_date } = req.body
+    const { promo_name, promo_price, start_date, end_date } = req.body
     const { item_id } = req.params
 
     const item = await Item.findById(item_id)
@@ -146,6 +146,7 @@ const addPromoItem = async (req, res) => {
     }
 
     item.discount = {
+        promo_name: promo_name,
         promo_price: promo_price,
         start_date: start_date,
         end_date: end_date
