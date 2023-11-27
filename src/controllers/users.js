@@ -48,7 +48,7 @@ const registerUser = async (req, res) => {
         address: address,
         phone_number: phone_number,
         password: hashedPassword,
-        profile_picture: "default.png",
+        profile_picture: "profile_default.png",
         role: 1,
         email_verified: false,
     })
