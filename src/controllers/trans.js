@@ -48,7 +48,7 @@ const purchaseItems = async (req, res) => {
         grand_total += priceNow*cart.amount
     }
     
-    if (build_service == "true") grand_total += 200000
+    if (build_service) grand_total += 200000
 
     const newTrans = await Transaction.create({
         user_id: user._id,
@@ -86,7 +86,7 @@ const purchaseItems = async (req, res) => {
                 email: user.email
             },
             credit_card: {secure: true},
-            // callbacks: { finish: 'http://localhost:3000/api/users/transaction/update'} // Untuk Frontend ternyata ehe
+            callbacks: { finish: 'http://localhost:5173/'} // Page payment success fully / redirect ke history
         }
     }
     await axios.request(option).then( async (response)=>{
