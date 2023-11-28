@@ -8,23 +8,25 @@ const User = require("../models/User");
 const Item = require("../models/Item");
 
 const addToCart = async (req, res) => {
-    const { items } = req.body;
+    const { item_id, amount } = req.body;
 
     let user = await User.findOne({email: req.user_email, status: true});
 
-    for (const reqCart of items) {
-        let ada = false;
-        for (const userCart of user.carts) {
-            if (reqCart.item_id == userCart.item_id){
-                ada = true;
-                userCart.amount += reqCart.amount
-            }
+    let ada = false;
+    for (const userCart of user.carts) {
+        if (item_id == userCart.item_id){
+            ada = true;
+            userCart.amount += parseInt(amount);
         }
-
-        if (!ada)
-            user.carts.push(reqCart)
     }
 
+    if (!ada){
+        user.carts.push({
+            item_id: item_id,
+            amount: amount
+        })
+    }
+    
     await user.save();
     
     return res.status(200).json({message: "Added to cart", carts: user.carts});
