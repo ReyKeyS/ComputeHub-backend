@@ -57,7 +57,7 @@ const purchaseItems = async (req, res) => {
         build_pc: build_service,
         grand_total: grand_total,
         detail_trans: detailTrans,
-        status: 2
+        status: 0
     });
 
     user.transactions.push({
@@ -86,7 +86,7 @@ const purchaseItems = async (req, res) => {
                 email: user.email
             },
             credit_card: {secure: true},
-            callbacks: { finish: 'http://localhost:5173/'} // Page payment success fully / redirect ke history
+            callbacks: { finish: 'http://localhost:5173/success'} // Page payment success fully / redirect ke history
         }
     }
     await axios.request(option).then( async (response)=>{
@@ -126,7 +126,7 @@ const updateTrans = async (req, res) => {
 
     if (!transaction_status || !order_id) return res.status(403).json({ message: `Forbidden` });
     
-    let status = transaction_status === 'settlement' ? 1 : transaction_status === 'pending' ? 2 : 0;
+    let status = transaction_status === 'settlement' ? 2 : transaction_status === 'pending' ? 0 : 0;
     let trans = await Transaction.findOne({invoice: order_id});
 
     trans.status = status
