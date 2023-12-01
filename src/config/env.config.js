@@ -1,6 +1,7 @@
 require("dotenv/config");
 
 const dictionary = {
+    FRONT_END_SOCKET: process.env.FRONT_END_SOCKET,
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
     HOST: process.env.HOST,
     CON_STRING: process.env.CON_STRING,
