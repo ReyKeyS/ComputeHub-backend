@@ -21,11 +21,13 @@ const userRouter = require("./routes/users");
 const itemRouter = require("./routes/items");
 const cartsRouter = require("./routes/carts");
 const transRouter = require("./routes/trans");
+const chatRouter = require("./routes/chats");
 
 app.use('/api/users', userRouter);
 app.use('/api/items', itemRouter);
 app.use('/api/users/carts', cartsRouter);
 app.use('/api/users/transaction', transRouter);
+app.use('/api/users/chat', chatRouter);
 
 // Get Any Picture
 app.get('/api/getpict', (req, res) => {

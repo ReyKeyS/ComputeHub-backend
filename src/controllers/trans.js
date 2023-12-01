@@ -95,6 +95,15 @@ const purchaseItems = async (req, res) => {
     })
 }
 
+const getTransaction = async (req, res) => {
+    const { trans_id } = req.params
+
+    const trans = await Transaction.findById(trans_id)
+    if (trans == null) return res.status(404).json({message: "Transaction not found"})
+
+    return res.status(200).json(trans)
+}
+
 // Optional
 const getStatusTrans = async (req, res) => {
     const { inv } = req.params
@@ -139,6 +148,7 @@ const updateTrans = async (req, res) => {
 
 module.exports = {
     purchaseItems,
+    getTransaction,
     getStatusTrans,
     updateTrans,
 }

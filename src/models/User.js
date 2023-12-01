@@ -23,9 +23,17 @@ const userSchema = new Schema({
         status: Number,
     }],
     chats: [{
-        chat: String,
-        time: Date,
-        sender: {type: Schema.Types.ObjectId, ref: 'User'}
+        email_sender: String,
+        name_sender: String,
+        profpict_sender: String,
+        is_read: Boolean,
+        latest_chat: String,
+        latest_time: Date,
+        chatting: [{
+            content: String,
+            sender: String,
+            time: Date,
+        }]
     }]
 }, {
     timestamps: {createdAt: 'create_at', updatedAt: 'update_at'}, versionKey: false
