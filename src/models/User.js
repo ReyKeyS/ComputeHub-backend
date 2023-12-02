@@ -17,7 +17,8 @@ const userSchema = new Schema({
         amount: Number,
     }],
     transactions: [{
-        trans_id: {type: Schema.Types.ObjectId, ref: 'Transaction;}'}, 
+        trans_id: {type: Schema.Types.ObjectId, ref: 'Transaction'},
+        trans_invoice: String,
         trans_date: Date,
         grand_total: Number,
         status: Number,

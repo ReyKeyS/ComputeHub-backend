@@ -21,7 +21,7 @@ const purchaseItems = async (req, res) => {
     const year = new Date(Date.now()).getFullYear();
     const month = new Date(Date.now()).getMonth();
     const date = new Date(Date.now()).getDate();
-    newInv += year.toString() + month.toString() + date.toString()
+    newInv += year.toString() + month.toString().padStart(2, '0') + date.toString().padStart(2, '0')
     let maxUrut = await Transaction.findOne({invoice: {$regex: new RegExp(`^${newInv}`)}}).sort({invoice: -1}).select({invoice: 1})
     if (maxUrut == null) newInv += "001";
     else {
@@ -62,6 +62,7 @@ const purchaseItems = async (req, res) => {
 
     user.transactions.push({
         trans_id: newTrans._id,
+        trans_invoice: newTrans.invoice,
         trans_date: newTrans.trans_date,
         grand_total: newTrans.grand_total,
         status: newTrans.status
@@ -105,37 +106,38 @@ const getTransaction = async (req, res) => {
 }
 
 const fetchTransaction = async (req, res) => {
-    const trans = await Transaction.find({}).populate({
+    const trans = await Transaction.find({})
+    .populate({
         path: 'user_id',
         select: 'display_name address '
+    })
+    .populate({
+        path: 'detail_trans.item_id'
     });
 
     return res.status(200).json(trans)
 }
 
-// Optional
-const getStatusTrans = async (req, res) => {
-    const { inv } = req.params
-    
-    const options = {
-        method: 'GET',
-        url: `https://api.sandbox.midtrans.com/v2/${inv}/status`,
-        headers: {
-            accept: 'application/json',
-            'content-type': 'application/json',
-            authorization: 'Basic ' + Buffer.from(env("SERVER_KEY")).toString("base64")
-        }
-    };
+const confirmTransaction = async (req, res) => {
+    const { trans_id } = req.params
+    const { status } = req.body
 
-    axios.request(options).then(async response => {
-        console.log(response);
-        return res.status(200).json({
-            invoice: response.data.invoice,
-            transaction_status: response.data.transaction_status,
-        })
-    }).catch(err => {
-        return res.status(502).json(err.message)
-    })
+    let trans = await Transaction.findById(trans_id)
+    if (trans == null) return res.status(404).json({message: "Transaction not found"})
+
+    // Update Transaction
+    trans.status = status
+
+    // Update User
+    let user = await User.findOne({"transactions.trans_invoice": trans.invoice})
+
+    let nowTrans = user.transactions.find(t => t.trans_invoice == trans.invoice);
+    nowTrans.status = status;
+
+    await trans.save()
+    await user.save() 
+
+    return res.status(200).json({message: "Transaction saved successfully"})
 }
 
 // API for completing transaction
@@ -145,12 +147,20 @@ const updateTrans = async (req, res) => {
     if (!transaction_status || !order_id) return res.status(403).json({ message: `Forbidden` });
     
     let status = transaction_status === 'settlement' ? 2 : transaction_status === 'pending' ? 0 : 0;
-    let trans = await Transaction.findOne({invoice: order_id});
 
+    // Update Transaction
+    let trans = await Transaction.findOne({invoice: order_id});
     trans.status = status
     trans.payment_date = Date.now();
 
-    await trans.save();
+    // Update User
+    let user = await User.findOne({"transactions.trans_invoice": trans.invoice})
+
+    let nowTrans = user.transactions.find(t => t.trans_invoice == trans.invoice);
+    nowTrans.status = status;
+
+    await trans.save()
+    await user.save() 
 
     return res.status(200).json({ message: 'Ok' });
 }
@@ -159,6 +169,6 @@ module.exports = {
     purchaseItems,
     getTransaction,
     fetchTransaction,
-    getStatusTrans,
     updateTrans,
+    confirmTransaction,
 }
