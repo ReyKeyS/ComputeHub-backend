@@ -118,28 +118,6 @@ const fetchTransaction = async (req, res) => {
     return res.status(200).json(trans)
 }
 
-const confirmTransaction = async (req, res) => {
-    const { trans_id } = req.params
-    const { status } = req.body
-
-    let trans = await Transaction.findById(trans_id)
-    if (trans == null) return res.status(404).json({message: "Transaction not found"})
-
-    // Update Transaction
-    trans.status = status
-
-    // Update User
-    let user = await User.findOne({"transactions.trans_invoice": trans.invoice})
-
-    let nowTrans = user.transactions.find(t => t.trans_invoice == trans.invoice);
-    nowTrans.status = status;
-
-    await trans.save()
-    await user.save() 
-
-    return res.status(200).json({message: "Transaction saved successfully"})
-}
-
 // API for completing transaction
 const updateTrans = async (req, res) => {
     const { transaction_status, order_id } = req.query;
@@ -163,6 +141,39 @@ const updateTrans = async (req, res) => {
     await user.save() 
 
     return res.status(200).json({ message: 'Ok' });
+}
+
+const confirmTransaction = async (req, res) => {
+    const { trans_id } = req.params
+    const { status } = req.body
+
+    let trans = await Transaction.findById(trans_id)
+    if (trans == null) return res.status(404).json({message: "Transaction not found"})
+
+    // Update Transaction
+    trans.status = status
+
+    // Update User
+    let user = await User.findOne({"transactions.trans_invoice": trans.invoice})
+
+    let nowTrans = user.transactions.find(t => t.trans_invoice == trans.invoice);
+    nowTrans.status = status;
+
+    await trans.save()
+    await user.save() 
+
+    // Update Stock
+    if (status == 1){
+        for (const d of trans.detail_trans) {
+            let item = await Item.findById(d.item_id)
+
+            item.stock -= d.qty
+
+            await item.save();
+        }
+    }
+
+    return res.status(200).json({message: "Transaction saved successfully"})
 }
 
 module.exports = {
