@@ -104,6 +104,15 @@ const getTransaction = async (req, res) => {
     return res.status(200).json(trans)
 }
 
+const fetchTransaction = async (req, res) => {
+    const trans = await Transaction.find({}).populate({
+        path: 'user_id',
+        select: 'display_name address '
+    });
+
+    return res.status(200).json(trans)
+}
+
 // Optional
 const getStatusTrans = async (req, res) => {
     const { inv } = req.params
@@ -149,6 +158,7 @@ const updateTrans = async (req, res) => {
 module.exports = {
     purchaseItems,
     getTransaction,
+    fetchTransaction,
     getStatusTrans,
     updateTrans,
 }
