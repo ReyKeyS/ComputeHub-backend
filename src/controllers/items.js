@@ -84,7 +84,6 @@ const getItem = async (req, res) => {
 const updateItem = async (req, res) => {
     const { name, description, price, stock, category, brand } = req.body
     const { item_id } = req.params
-
     const item = await Item.findById(item_id)
     if (item == null) return res.status(404).json({message: "Item not found"})
 
@@ -98,8 +97,8 @@ const updateItem = async (req, res) => {
         if (isNaN(stock)) return res.status(400).json({message: "Stock must be a number"})
         item.stock = stock
     } 
-    if (category) item.category
-    if (brand) item.brand
+    if (category) item.category = category; // <-- tambahkan baris ini untuk memperbarui category
+    if (brand) item.brand = brand; // <-- tambahkan baris ini untuk memperbarui brand
 
     await item.save()
 
