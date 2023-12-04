@@ -167,6 +167,15 @@ const deletePromoItem = async (req, res) => {
     return res.status(200).json({message: "Promo has been deleted", item: item})
 }
 
+const getItemPromo = async (req, res) => {
+    const hasil = await Item.aggregate([
+        { $match: { discount: { $exists: true } } }
+    ]);
+    console.log(hasil)
+    
+    return res.status(200).json(hasil);
+}
+
 module.exports = {
     addItem,
     fetchItem,
@@ -175,6 +184,7 @@ module.exports = {
     deleteItem,
     addPromoItem,
     deletePromoItem,
+    getItemPromo,
 }
 
 
