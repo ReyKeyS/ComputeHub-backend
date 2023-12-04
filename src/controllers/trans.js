@@ -21,7 +21,7 @@ const purchaseItems = async (req, res) => {
     const year = new Date(Date.now()).getFullYear();
     const month = new Date(Date.now()).getMonth();
     const date = new Date(Date.now()).getDate();
-    newInv += year.toString() + month.toString().padStart(2, '0') + date.toString().padStart(2, '0')
+    newInv += year.toString() + (parseInt(month)+1).toString().padStart(2, '0') + date.toString().padStart(2, '0')
     let maxUrut = await Transaction.findOne({invoice: {$regex: new RegExp(`^${newInv}`)}}).sort({invoice: -1}).select({invoice: 1})
     if (maxUrut == null) newInv += "001";
     else {
