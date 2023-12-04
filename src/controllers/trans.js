@@ -57,6 +57,7 @@ const purchaseItems = async (req, res) => {
         build_pc: build_service,
         grand_total: grand_total,
         detail_trans: detailTrans,
+        payment_date: Date.now(),
         status: 0
     });
 
@@ -65,6 +66,7 @@ const purchaseItems = async (req, res) => {
         trans_invoice: newTrans.invoice,
         trans_date: newTrans.trans_date,
         grand_total: newTrans.grand_total,
+        payment_date: Date.now(),
         status: newTrans.status
     });
     user.carts = [];
@@ -136,6 +138,7 @@ const updateTrans = async (req, res) => {
 
     let nowTrans = user.transactions.find(t => t.trans_invoice == trans.invoice);
     nowTrans.status = status;
+    nowTrans.payment_date = Date.now();
 
     await trans.save()
     await user.save() 
