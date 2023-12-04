@@ -329,6 +329,14 @@ const verifyEmail = async ( req, res )=>{
     });
 }
 
+const getSingleUser=async(req,res) => {
+    const {email}=req.params
+    const pengguna=await User.findOne({email:email})
+    if (!pengguna)return res.status(404).json({message:"User not found!"})
+
+    return res.status(200).json(pengguna)
+    
+}
 module.exports = {
     registerUser,
     loginUser,
@@ -337,7 +345,8 @@ module.exports = {
     updateUser,
     updateProfPict,
     deleteUser,
-    verifyEmail
+    verifyEmail,
+    getSingleUser
 }
 
 
