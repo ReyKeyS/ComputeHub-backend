@@ -120,7 +120,7 @@ const fetchTransaction = async (req, res) => {
 
 const HistoryTransaction = async (req, res) => {
     const userId = req.params.userId; 
-    console.log(userId);
+    console.log("userId", userId);
     const trans = await Transaction.find({ user_id: userId })
         .populate({
             path: 'user_id',
@@ -130,6 +130,7 @@ const HistoryTransaction = async (req, res) => {
             path: 'detail_trans.item_id'
         });
 
+        console.log("trans", trans);
     return res.status(200).json(trans);
 }
 
