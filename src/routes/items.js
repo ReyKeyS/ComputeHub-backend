@@ -16,7 +16,7 @@ const middleware = require("../middleware");
 
 router.post("/add", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], addItem);
 
-router.get("/fetch", fetchItem);
+router.get("/", fetchItem);
 router.get("/:item_id", getItem);
 router.get("/promo/fetch", getItemPromo);
 
