@@ -7,6 +7,7 @@ const {
     fetchTransaction,
     getStatusTrans,
     updateTrans,
+    HistoryTransaction,
     confirmTransaction
 } = require("../controllers/trans");
 
@@ -15,6 +16,7 @@ const middleware = require("../middleware");
 router.post("/purchase", [ middleware.verifyJWT, middleware.cekRole.cekRoleCustomer ], purchaseItems);
 router.get("/detail/:trans_id", [ middleware.verifyJWT], getTransaction);
 router.get("/fetch", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], fetchTransaction);
+router.get("/history", [ middleware.verifyJWT, middleware.cekRole.cekRoleCustomer ], HistoryTransaction);
 router.get('/update', updateTrans)
 router.put('/confirm/:trans_id', [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], confirmTransaction);
 

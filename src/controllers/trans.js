@@ -118,6 +118,21 @@ const fetchTransaction = async (req, res) => {
     return res.status(200).json(trans)
 }
 
+const HistoryTransaction = async (req, res) => {
+    const userId = req.params.userId; 
+
+    const trans = await Transaction.find({ user_id: userId })
+        .populate({
+            path: 'user_id',
+            select: 'display_name address'
+        })
+        .populate({
+            path: 'detail_trans.item_id'
+        });
+
+    return res.status(200).json(trans);
+}
+
 // API for completing transaction
 const updateTrans = async (req, res) => {
     const { transaction_status, order_id } = req.query;
@@ -183,4 +198,5 @@ module.exports = {
     fetchTransaction,
     updateTrans,
     confirmTransaction,
+    HistoryTransaction,
 }
