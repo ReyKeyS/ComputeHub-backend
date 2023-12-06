@@ -128,6 +128,7 @@ const HistoryTransaction = async (req, res) => {
         })
         .populate({
             path: 'detail_trans.item_id'
+            
         });
 
     return res.status(200).json(trans);
