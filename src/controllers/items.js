@@ -60,6 +60,23 @@ const addItem = async (req, res) => {
     }
 }
 
+const addRatingItem = async (req, res) => {
+    const { item_id } = req.params
+    const { rating } = req.body.rating
+
+    const item = await Item.findById(item_id)
+    if (!item) {
+        return res.status(404).json({ error: 'Item not found' });
+    }
+    item.ratings.push(rating)
+    const totalRating = item.ratings.reduce((acc, cur) => acc + cur, 0);
+    const averageRating = totalRating / item.ratings.length;
+
+    await item.save();
+
+    return res.status(200).json({ message: 'Rating successfullt added', averageRating });
+}
+
 const fetchItem = async (req, res) => {
     const { search, harga_min, harga_max } = req.query
     
@@ -186,6 +203,7 @@ const fetchItemCategory = async (req, res) => {
 
 module.exports = {
     addItem,
+    addRatingItem,
     fetchItem,
     getItem,
     updateItem,

@@ -97,7 +97,9 @@ const purchaseItems = async (req, res) => {
 const getTransaction = async (req, res) => {
     const { trans_id } = req.params
 
-    const trans = await Transaction.findById(trans_id)
+    const trans = await Transaction.findById(trans_id).populate({
+        path: 'detail_trans.item_id'
+    });
     if (trans == null) return res.status(404).json({message: "Transaction not found"})
 
     return res.status(200).json(trans)

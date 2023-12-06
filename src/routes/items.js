@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
     addItem,
+    addRatingItem,
     fetchItem,
     getItem,
     updateItem,
@@ -16,6 +17,7 @@ const {
 const middleware = require("../middleware");
 
 router.post("/add", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], addItem);
+router.post("/rating/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleCustomer ], addRatingItem);
 
 router.get("/", fetchItem);
 router.get("/:item_id", getItem);
