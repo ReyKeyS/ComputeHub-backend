@@ -176,6 +176,14 @@ const getItemPromo = async (req, res) => {
     return res.status(200).json(hasil);
 }
 
+const fetchItemCategory = async (req, res) => {
+    const { cate } = req.params
+
+    const items = await Item.find({ category: cate, status: true})
+
+    return res.status(200).json(items)
+}
+
 module.exports = {
     addItem,
     fetchItem,
@@ -185,6 +193,7 @@ module.exports = {
     addPromoItem,
     deletePromoItem,
     getItemPromo,
+    fetchItemCategory,
 }
 
 

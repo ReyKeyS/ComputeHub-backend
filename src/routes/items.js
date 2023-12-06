@@ -10,6 +10,7 @@ const {
     addPromoItem,
     deletePromoItem,
     getItemPromo,
+    fetchItemCategory,
 } = require("../controllers/items");
 
 const middleware = require("../middleware");
@@ -19,6 +20,7 @@ router.post("/add", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], a
 router.get("/", fetchItem);
 router.get("/:item_id", getItem);
 router.get("/promo/fetch", getItemPromo);
+router.get("/category/:cate", fetchItemCategory);
 
 router.put("/update/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], updateItem);
 router.delete("/delete/:item_id", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], deleteItem);
