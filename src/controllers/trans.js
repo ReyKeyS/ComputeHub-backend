@@ -67,7 +67,6 @@ const purchaseItems = async (req, res) => {
         grand_total: newTrans.grand_total,
         status: newTrans.status
     });
-    user.carts = [];
 
     await user.save();
 
@@ -86,8 +85,7 @@ const purchaseItems = async (req, res) => {
             customer_details: {
                 email: user.email
             },
-            credit_card: {secure: true},
-            callbacks: { finish: 'http://localhost:5173/success'} // Page payment success fully / redirect ke history
+            credit_card: {secure: true}
         }
     }
     await axios.request(option).then( async (response)=>{
@@ -155,6 +153,8 @@ const updateTrans = async (req, res) => {
     nowTrans.payment_date = Date.now();
 
     await trans.save()
+    if (transaction_status == 'settlement')
+        user.carts = [];
     await user.save() 
 
     return res.status(200).json({ message: 'Ok' });
@@ -177,7 +177,7 @@ const confirmTransaction = async (req, res) => {
     nowTrans.status = status;
 
     await trans.save()
-    await user.save() 
+    await user.save()
 
     // Update Stock
     if (status == 1){
