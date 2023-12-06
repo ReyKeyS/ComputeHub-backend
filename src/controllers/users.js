@@ -104,7 +104,7 @@ const registerUser = async (req, res) => {
         text-align: center;
         ">
         To complete the verification process, simply click on the following link: 
-        <a href='http://${ env("HOST") }:3000/api/users/verifyemail/${ token }' style="
+        <a href='http://${ env("HOST") }:5173/verifyemail?token=${ token }' style="
         margin-left:auto;
         margin-right:auto;
         padding-left: 1.25rem;
