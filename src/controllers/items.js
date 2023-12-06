@@ -8,6 +8,7 @@ const { getConn } = require("../database/connection");
 
 // Models
 const Item = require("../models/Item");
+const Transaction = require("../models/Transaction");
 
 const addItem = async (req, res) => {
     const newID = await Item.create({})
@@ -62,19 +63,25 @@ const addItem = async (req, res) => {
 
 const addRatingItem = async (req, res) => {
     const { item_id } = req.params
-    const { rating } = req.body.rating
+    const { rating, trans_id } = req.body
 
     const item = await Item.findById(item_id)
-    if (!item) {
-        return res.status(404).json({ error: 'Item not found' });
-    }
-    item.ratings.push(rating)
-    const totalRating = item.ratings.reduce((acc, cur) => acc + cur, 0);
-    const averageRating = totalRating / item.ratings.length;
-
+    if (!item) return res.status(404).json({ error: 'Item not found' });
+    item.ratings.push({rating: parseFloat(rating)})
+    
+    const trans = await Transaction.findById(trans_id)
+    if (!trans) return res.status(404).json({ error: 'Transaction not found' });
+    const detail = trans.detail_trans.find(f => f.item_id == item_id)
+    detail.rating = parseFloat(rating)
+    
+    // const totalRating = item.ratings.reduce((acc, cur) => acc + cur, 0);
+    // const averageRating = totalRating / item.ratings.length;
+    
     await item.save();
+    await trans.save();
 
-    return res.status(200).json({ message: 'Rating successfullt added', averageRating });
+    return res.status(200).json({ message: 'Rating successfully added' });
+    // return res.status(200).json({ message: 'Rating successfullt added', averageRating });
 }
 
 const fetchItem = async (req, res) => {

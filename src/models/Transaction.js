@@ -13,6 +13,7 @@ const transSchema = new Schema({
         price: Number,
         qty: Number,
         subtotal: Number,
+        rating: Number,
     }],
     payment_date: Date,
     status: Number,
