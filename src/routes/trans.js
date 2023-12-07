@@ -8,7 +8,8 @@ const {
     getStatusTrans,
     updateTrans,
     HistoryTransaction,
-    confirmTransaction
+    confirmTransaction,
+    cancelTransaction,
 } = require("../controllers/trans");
 
 const middleware = require("../middleware");
@@ -19,5 +20,6 @@ router.get("/fetch", [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], 
 router.get("/history/fetch/:userId",[ middleware.verifyJWT, middleware.cekRole.cekRoleCustomer ], HistoryTransaction);
 router.get('/update', updateTrans)
 router.put('/confirm/:trans_id', [ middleware.verifyJWT, middleware.cekRole.cekRoleAdmin ], confirmTransaction);
+router.put('/cancel/:trans_id', [middleware.verifyJWT, middleware.cekRole.cekRoleCustomer], cancelTransaction);
 
 module.exports = router;

@@ -195,6 +195,24 @@ const confirmTransaction = async (req, res) => {
     return res.status(200).json({message: "Transaction saved successfully"})
 }
 
+const cancelTransaction = async (req, res) => {
+    const { trans_id } = req.params
+
+    let trans = await Transaction.findById(trans_id)
+    if (trans == null) return res.status(404).json({message: "Transaction not found"})
+
+    trans.status = 3;
+    let user = await User.findOne({"transactions.trans_invoice": trans.invoice})
+
+    let nowTrans = user.transactions.find(t => t.trans_invoice == trans.invoice);
+    nowTrans.status = 3;
+
+    await trans.save()
+    await user.save()
+    
+    return res.status(200).json({message: "Transaction saved successfully"})
+}
+
 module.exports = {
     purchaseItems,
     getTransaction,
@@ -202,4 +220,5 @@ module.exports = {
     updateTrans,
     confirmTransaction,
     HistoryTransaction,
+    cancelTransaction,
 }
