@@ -2,18 +2,20 @@ const env = require("../config/env.config")
 
 const User = require("../models/User")
 
-// const readChat = async (req, res) => {
-//     const { id_chat } = req.params
+const readChat = async (req, res) => {
+    let user = await User.findOne({email: req.user_email})
+    
+    if (user.chats.length > 0){
+        user = await User.findOne({email: req.user_email}).populate({
+            path: "chats.id_sender"
+        })
+        user.chats[0].is_read = true;
+    }
+    
+    await user.save();
 
-//     const user = await User.findOne({username: req.username})
-//     const chat = user.friends.find(f => f.id_chat == id_chat)
-
-//     chat.is_read = true
-
-//     await user.save();
-
-//     return res.sendStatus(200);
-// }
+    return res.status(200).json(user);
+}
 
 const addChat = async (req, res) => {
     const { content, email_to } = req.body
@@ -21,14 +23,12 @@ const addChat = async (req, res) => {
     const curUser = await User.findOne({email: req.user_email})
     const toUser = await User.findOne({email: email_to});
 
-    let chat1 = toUser.chats.find(f => f.email_sender == curUser.email);
-    let chat2 = curUser.chats.find(f => f.email_sender == toUser.email);
+    let chat1 = toUser.chats.find(f => f.id_sender.toString() == curUser._id.toString());
+    let chat2 = curUser.chats.find(f => f.id_sender.toString() == toUser._id.toString());
     
     if (!chat1 || !chat2) {
         curUser.chats.push({
-            email_sender: toUser.email,
-            name_sender: toUser.display_name,
-            profpict_sender: toUser.profile_picture,
+            id_sender: toUser._id,
             is_read: true,
             latest_chat: null,
             latest_time: null,
@@ -36,9 +36,7 @@ const addChat = async (req, res) => {
         })
 
         toUser.chats.push({
-            email_sender: curUser.email,
-            name_sender: curUser.display_name,
-            profpict_sender: curUser.profile_picture,
+            id_sender: curUser._id,
             is_read: true,
             latest_chat: null,
             latest_time: null,
@@ -48,13 +46,13 @@ const addChat = async (req, res) => {
         await curUser.save()
         await toUser.save()
         
-        chat1 = toUser.chats.find(f => f.email_sender == curUser.email);
-        chat2 = curUser.chats.find(f => f.email_sender == toUser.email);
+        chat1 = toUser.chats.find(f => f.id_sender == curUser._id);
+        chat2 = curUser.chats.find(f => f.id_sender == toUser._id);
     }
 
     chat1.latest_chat = content;
     chat1.latest_time = Date.now();
-    if (chat1.email_sender == curUser.email) chat1.is_read = false; else chat1.is_read = true;
+    if (chat1.id_sender.toString() == curUser._id.toString()) chat1.is_read = false; else chat1.is_read = true;
     chat1.chatting.push({
         content: content,
         sender: curUser.email,
@@ -63,7 +61,7 @@ const addChat = async (req, res) => {
 
     chat2.latest_chat = content;
     chat2.latest_time = Date.now();
-    if (chat2.email_sender == curUser.email) chat2.is_read = false; else chat2.is_read = true;
+    if (chat2.id_sender.toString() == curUser._id.toString()) chat2.is_read = false; else chat2.is_read = true;
     chat2.chatting.push({
         content: content,
         sender: curUser.email,
@@ -141,7 +139,7 @@ const addChat = async (req, res) => {
 // }
 
 module.exports = {
-    // readChat,
+    readChat,
     addChat,
     // unsendChat,
     // pinChat,

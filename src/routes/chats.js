@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    // readChat,
+    readChat,
     addChat,
     // unsendChat,
     // pinChat,
@@ -10,7 +10,7 @@ const {
 
 const middlewares = require("../middleware");
 
-// router.put("/read/:id_chat", [middlewares.verifyJWT], readChat)
+router.post("/read", [middlewares.verifyJWT], readChat)
 router.post("/add", [middlewares.verifyJWT], addChat)
 // router.delete("/delete/:id_chat/:index", [middlewares.verifyJWT], unsendChat)
 // router.put("/pin/:id_chat/:index", [middlewares.verifyJWT], pinChat)

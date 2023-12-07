@@ -24,9 +24,7 @@ const userSchema = new Schema({
         status: Number,
     }],
     chats: [{
-        email_sender: String,
-        name_sender: String,
-        profpict_sender: String,
+        id_sender: {type: Schema.Types.ObjectId, ref: 'User'},
         is_read: Boolean,
         latest_chat: String,
         latest_time: Date,

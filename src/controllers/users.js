@@ -247,6 +247,11 @@ const getUser = async (req, res) => {
     let user = await User.findOne({email: req.user_email, status: true});
     if (user == null) return res.status(404).json({message: 'User not found'})
 
+    if (user.chats.length > 0)
+        user = await User.findOne({email: req.user_email, status: true}).populate({
+            path: "chats.id_sender"
+        })
+
     user.password = undefined;
     return res.status(200).json(user);
 }
